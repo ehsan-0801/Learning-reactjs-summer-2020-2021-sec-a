@@ -13,6 +13,15 @@ function App() {
     setUserList(list);
   }
 
+  const addUser = (user)=>{
+    setUserList([...userlist, user]);
+  }
+  const edituser = (id,editeduser)=>{
+    const list = userlist.filter((editeduser)=>editeduser.id !== id);
+    setUserList([...list, editeduser]);
+  }
+  
+
   return (
    
     <Router>
@@ -27,9 +36,9 @@ function App() {
             </div>
           </Route>
           <Route path='/create'>
-              <CreateUser status='add' />
+              <CreateUser status='add' addNewUser={addUser} />
           </Route>
-          <Route path='/edit/:id' children={<CreateUser status='edit' />}></Route>
+          <Route path='/edit/:id' children={<CreateUser status='Update' edituserCallback={edituser} />} ></Route>
           <Route path='*'>
               404 not found
           </Route>          

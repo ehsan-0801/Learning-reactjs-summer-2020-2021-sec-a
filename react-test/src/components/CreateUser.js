@@ -1,55 +1,51 @@
-  
-import {useState} from 'react';
-//import {users} from '../usersData';
-import {useParams} from 'react-router-dom';
-import './User';
+import { useParams } from "react-router";
+import { useState } from "react";
+import { useHistory } from "react-router";
+//import UserList from "./UserList";
 
+const CreateUser = ({status, addNewUser,edituserCallback})=>{
+    const {id:eid} = useParams();
+    const [user, setUser] = useState({name: '', id:'', dept:''});
+    const history = useHistory();
 
-const CreateUser = ({status, callback})=>{
+    const change = (e)=>{
+        const attr = e.target.name;
+        const val = e.target.value;
+        setUser({...user, [attr]: val})
+    };
+    
 
-    const {id:eid}  = useParams();
-    const [newUser, setNewUser] = useState({
-        id: '',
-        name: '',
-        dept: '',
-    });
-   
-        
-    const formSubmit=(e)=>{
+    const onsubmit = (e)=>{
         e.preventDefault();
-    
-        if(status === 'add'){
-            callback(newUser);
-            setNewUser({
-                id: '',
-                name: '',
-                dept: '',
-            })
-    
-        }
+        console.log(user);
+        // addNewUser(user);
+        // edituser(user);
+        status==='add'?addNewUser(user):edituserCallback(eid,user);
+        history.push('/Userlist');
     }
+
     return(
         <>
-        <br/>
+            <br/>
             <h3>{status==='add'?'Create':'Edit'} User Page: {eid}</h3>
-        <form onSubmit={formSubmit}>
+            <form onSubmit={onsubmit}>
             <table>
             <tr>
                 <td>Username</td>
                 <td>
-                    <input type="text" name="name"/> 
+                    <input type="text" name="name" value={user.name} onChange={change}/> 
                 </td>
             </tr>
             <tr>
                 <td>Id</td>
                 <td>
-                    <input type="text" name="id"/> 
+                    <input type="text" name="id" value={user.id} onChange={change} /> 
                 </td>
             </tr>
             <tr>
                 <td>Dept</td>
                 <td>
-                    <input type="text" name="dept"/> 
+                    <input type="text" name="dept" value={user.dept} onChange={change} /> 
                 </td>
             </tr>
             
@@ -65,3 +61,4 @@ const CreateUser = ({status, callback})=>{
 }
 
 export default CreateUser;
+ 
